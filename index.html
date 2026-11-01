@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TESTE DE POLÍGRAFO</title>
+  
+  <!-- Fontes -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+  <!-- Efeito da tv de tubo -->
+  <div class="crt-overlay"></div>
+
+  <div class="container">
+
+    <!-- Tela Inicial -->
+    <div id="inicio" class="quadrado">
+      <div class="logo-container">
+        <img src="/img/52bb004e-1feb-40fb-b4fd-429d5a9cefba.png" alt="Logo L" class="logo">
+      </div>
+      
+      <h1 class="titulo">INTERROGATÓRIO E INTERFACIAMENTO DE POLÍGRAFO</h1>
+      <p class="subtitulo">INVESTIGAÇÃO OFICIAL DO CASO KIRA - PROCEDIMENTO RESTRITO</p>
+
+      <div class="aviso">
+        <div class="texto-aviso">
+          <span class="alerta">⚠️</span> AVISO AO INVESTIGADO:
+        </div>
+        <p class="detalhe-aviso">
+          Você foi conectado ao bio-monitor biométrico da Força Tarefa. Sensores de Micro-Expressão, Frequência Cardíaca (ECG) e Resistência Galvânica da Pele (GSR) estão calibrados.
+        </p>
+        <p class="detalhe-aviso-efeito">
+          Serão feitas <strong>10 perguntas diretas</strong>. Suas variações de estresse determinarão com precisão probabilística se suas respostas escondem a identidade de <span class="texto-vermelho">KIRA</span>.
+        </p>
+      </div>
+
+      <button class="botao-inicio" onclick="startTest()">INICIAR EXAME BIOMÉTRICO</button>
+    </div>
+
+    <!-- Tela de Perguntas -->
+    <div id="Teste" class="painel-quiz hidden">
+      
+      <!-- Cabeçalho do Terminal -->
+      <div class="painel-header">
+        <div class="header-canto">
+
+          <div class="l-logo-small">
+            <img src="/img/52bb004e-1feb-40fb-b4fd-429d5a9cefba.png" alt="Logo L" class="logo">
+          </div>
+
+          <div>
+            <div class="titulo-qg">Quartel-General da Força-Tarefa Policial de Tóquio <span class="tag-secret">TOP SECRET</span></div>
+            <div class="subtitulo-qg"> BANCO DE DADOS INVESTIGAÇÃO DE KIRA // MÓDULO DO POLÍGRAFO v4.09</div>
+          </div>
+        </div>
+        <div class="header-controles">
+          <button class="botao-controle" id="botao-som" onclick="toggleSound()">🔊 SOM: LIGADO</button>
+          <div class="sinal-vital"><span class="dot-red"></span> GRAVANDO SINAIS VITAIS</div>
+        </div>
+      </div>
+
+      <!-- Painel Biométrico -->
+      <div class="medidor-card">
+        <div class="medidor-header">
+          <span>NÍVEL DE TENSÃO BIOLÓGICA</span>
+          <span id="stress-pct" class="text-red">0%</span>
+        </div>
+
+        <!-- Semicirculo do Polígrafo -->
+        <div class="medida-body">
+          <div class="medida-arco">
+            <div class="medida-ponteiro" id="medida-ponteiro"></div>
+            <div class="medida-centro"></div>
+          </div>
+          <div class="indicadores">
+            <span>CALMO</span>
+            <span>ALERTA</span>
+            <span>KIRA</span>
+          </div>
+        </div>
+
+        <div class="kira-prob-container">
+          <div class="kira-prob-header">
+            <span>PROBABILIDADE DE SER KIRA</span>
+            <span id="kira-prob-pct" class="text-red">0.0%</span>
+          </div>
+          <div class="barra-progresso">
+            <div id="kira-prob-bar" class="progresso" style="width: 0%;"></div>
+          </div>
+        </div>
+
+        <div class="deducao" id="deducao">
+          "Aguardando o início do interrogatório biométrico..."
+        </div>
+      </div>
+
+      <!-- Caixa da Pergunta -->
+      <div class="question-card">
+        <div class="question-header">
+          <div class="p-titulo"> QUESTIONÁRIO DE DIAGNÓSTICO // PERGUNTA <span id="q-num">1</span> DE 10</div>
+          <div class="p-pontos" id="p-pontos">
+            <!-- Gerado via JavaScript -->
+          </div>
+        </div>
+
+        <div class="corpo-pergunta">
+          <div class="p-subtag">🔴 PERGUNTA TRANSMITIDA POR L:</div>
+          <div class="p-texto" id="p-texto">Carregando pergunta...</div>
+        </div>
+
+        <!-- Registro/histórico -->
+        <div class="registro">
+          <div>> Conexão estabelecida com o interrogado.</div>
+          <div id="registro-status" class="text-green">> Aguardando primeira resposta para análise de estresse miocárdico...</div>
+        </div>
+
+        <!-- Botões de Resposta -->
+        <div class="respostas">
+          <button class="botao-sim" onclick="answer(true)">
+            <span class="radio-icon">○</span> SIM (AFIRMATIVO)
+          </button>
+          <button class="botao-nao" onclick="answer(false)">
+            <span class="radio-icon">○</span> NÃO (NEGATIVO)
+          </button>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Tela do Resultado do polígrafo -->
+    <div id="tela-resultado" class="card-panel hidden">
+      <div class="l-logo">
+        <img src="/img/52bb004e-1feb-40fb-b4fd-429d5a9cefba.png" alt="Logo L" class="logo">
+      </div>
+      <h1 class="main-title">RELATÓRIO FINAL DE INVESTIGAÇÃO</h1>
+      
+      <div class="veredito-banner" id="veredito-banner">ANALISANDO DADOS...</div>
+
+      <div class="resultados">
+        <div class="res-stat">
+          <span class="res-lbl">PROBABILIDADE KIRA:</span>
+          <span class="res-val" id="final-prob">0.0%</span>
+        </div>
+        <div class="res-stat">
+          <span class="res-lbl">PICO DE ESTRESSE BIOMÉTRICO:</span>
+          <span class="res-val" id="final-stress">0%</span>
+        </div>
+      </div>
+
+      <div class="l-caixa-deducao" id="l-notas-finais">
+        Analisando padrão biométrico do suspeito...
+      </div>
+
+      <button class="btn-start mt-20" onclick="resetTest()">REINICIAR INTERROGATÓRIO</button>
+    </div>
+
+  </div>
+
+  <script src="/javascript/javascript.js"></script>
+</body>
+</html>
